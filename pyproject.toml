@@ -1,0 +1,42 @@
+[project]
+name = "ball_estimation"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Krzysztof Czajkowski", email = "krzysztof.czajkowski@respo.vision"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "scipy>=1.13.1",
+    "opencv-python>=4.9.0.80",
+    "matplotlib>=3.9.0",
+    "pandas==2.2.2",
+    "lmfit>=1.3.1",
+    "tqdm>=4.66.4",
+    "pydantic<2.0",
+    "numba>=0.59.1",
+    "joblib>=1.4.2",
+    "pyyaml>=6.0.1",
+    "mujoco>=3.1.6",
+    "mujoco-mjx>=3.1.6",
+    "hydra-core>=1.3,<1.4",
+    "pyarrow>=20.0.0",
+    "pykalman>=0.9.5",
+    "lightgbm>=3.0",
+    "scikit-learn>=1.8.0",
+    "numpy==1.26.4",
+]
+
+[dependency-groups]
+dev = [
+    "setuptools>=70.1.1",
+]
+notebooks = [
+    "ipykernel>=6.29.5",
+]
+
+# https://docs.astral.sh/uv/concepts/build-backend/#using-the-uv-build-backend
+[build-system]
+requires = ["uv_build>=0.8.15,<0.9.0"]
+build-backend = "uv_build"
