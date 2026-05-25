@@ -1,4 +1,4 @@
-# 3dball-research
+# ball3d
 
 3D ball trajectory estimation and analysis for football/soccer video footage.
 
@@ -19,21 +19,6 @@ Then run in the root directory:
 ```bash
 gsutil -m cp -r gs://3dball-research/data .
 ```
-
-### GDrive (Obsolete)
-
-Short samples:
-
-`https://drive.google.com/drive/folders/1uSd3RazCc6oMGf1ObXBUgf2y7H8J7RmM?usp=sharing`
-`https://drive.google.com/drive/folders/1-A1Ljcylj7a8tSceTyYLrJw8nL7fn5dq?usp=sharing`
-
-45-minutes sample:
-`https://drive.google.com/drive/folders/1X2RUPDGWN3Q0iFJAjQDiaGsKramR5NhK?usp=sharing`
-
-8-cameras sequences:
-`https://drive.google.com/drive/folders/1fJjM48HbsC5f0YnkcSUOhbzxsScELTxh?usp=sharing`
-
-Download folder to `data/` in the repository root folder.
 
 ### Data structure
 
@@ -56,7 +41,7 @@ data/<clip_name>/
 
 ## Running Experiments
 
-All scripts use [Hydra](https://hydra.cc/) for configuration. **Always run via `poetry run`.**
+All scripts use [Hydra](https://hydra.cc/) for configuration. **Always run via `uv run`.**
 
 See `conf/base.yaml` for global parameters and `conf/trajectory/` for estimator-specific configs.
 
@@ -85,7 +70,7 @@ uv run python estimate_trajectory.py \
 
 # Custom estimator
 uv run python estimate_trajectory.py \
-    trajectory=kinetic_estimator \
+    trajectory=basic_angular_velocity \
     root=data/1080-txm/clip version=base
 ```
 
@@ -117,17 +102,17 @@ uv run python statistics_gt_trajectory.py \
 
 ### Available Trajectory Estimators
 
-See `conf/trajectory/` for all configs. Key ones:
+The seven physics models from the paper (Table 1):
 
-| Config | Description |
-|--------|-------------|
-| `base_trajectory` | Default estimator (KineticTrajectoryEstimator) |
-| `basic_kinetic_estimator` | Basic kinetic model with air resistance |
-| `scipy_kinetic_estimator` | SciPy optimizer with Magnus effect |
-| `scipy_angular_velocity` | SciPy with angular velocity estimation |
-| `mujoco_kinetic_estimator` | MuJoCo physics simulation |
-| `mujoco_angular_velocity` | MuJoCo with angular velocity |
-| `mujoco_ellipsoid_base` | MuJoCo with ellipsoid ball model |
+| Config | Paper name | Description |
+|--------|------------|-------------|
+| `basic_kinetic_estimator_parabola` | basic parabola | Pure ballistic motion under gravity; no drag, no spin |
+| `basic_kinetic_estimator` | basic kinetic | Gravity + quadratic drag (`k3`) |
+| `basic_kinetic_fitg` | basic fitg | Drag (`k3`) + fitted gravitational constant `g` (proxy for unmodelled effects) |
+| `basic_angular_velocity` | basic angular | Drag + Magnus force decomposed into lift (`kl`, topspin/backspin) and sidespin (`ks`) |
+| `mujoco_kinetic_estimator` | MuJoCo kinetic | MuJoCo simulation with fixed inertia-based fluid drag (no fitted aero params) |
+| `mujoco_angular_velocity` | MuJoCo angular | MuJoCo with fitted initial angular velocity `ω₀` |
+| `mujoco_ellipsoid_angular_velocity` | MuJoCo ellipsoid | MuJoCo ellipsoid fluid model: blunt drag, angular drag, Magnus, with fitted `ω₀` |
 
 ### Common Overrides
 

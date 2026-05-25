@@ -1,5 +1,5 @@
-# Ignore data folders
-data/
+# Ignore dataset folder at repo root (not the ball_estimation.data subpackage)
+/data/
 
 # Ignore checkpoints directory
 checkpoints/

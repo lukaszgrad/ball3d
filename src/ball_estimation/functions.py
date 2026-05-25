@@ -56,9 +56,6 @@ def get_leap_pivots(
         (pivot_type_mask | pivot_type_mask.shift()) & (big_xyz_leap | big_angle_leap)
     ]["file_name"].values
 
-    df["cos_shift"] = df["cos"].shift()
-    save_leap_data(df)
-
     logger.info(f"Leap pivots list: {leap_pivots_list}")
 
     return pivots_list, leap_pivots_list
@@ -98,21 +95,6 @@ def calculate_big_angle_leap(
         & (df["cos"] < angle_threshold)
         & (df["cos"].shift() < angle_threshold)
     )
-
-
-def save_leap_data(df: pd.DataFrame) -> None:
-    df[
-        [
-            "file_name",
-            "type",
-            "x_predicted",
-            "y_predicted",
-            "z_predicted",
-            "leap_dist",
-            "cos",
-            "cos_shift",
-        ]
-    ].to_csv("leaps.csv", index=False)
 
 
 def remove_leap(df: pd.DataFrame, start: int, end: int) -> None:

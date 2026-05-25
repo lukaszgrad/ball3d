@@ -338,7 +338,6 @@ class KineticTrajectoryEstimator(TrajectoryEstimator):
                 self.relative_error(err_straight, start_frame, end_frame)
                 > self.good_fit_threshold
             ):
-                print(df_trajectory)
                 (
                     err_arc,
                     motion_parameters_estimate
