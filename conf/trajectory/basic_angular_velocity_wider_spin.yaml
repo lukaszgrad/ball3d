@@ -1,0 +1,24 @@
+defaults:
+  - basic_angular_velocity
+
+estimator_params:
+  arc_optimizer_config:
+    optimization_bounds:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationBounds
+      allowed_startpoint_shift_arc: 1
+      max_ball_speed: 600
+      gravitation_g: 9.806
+      g_variation: 3.5
+      k3: 0.05
+      k3_variation: 0.95
+      kl: 0.0
+      ks: 0.0
+      kl_ks_variation: 0.03
+    optimization_options:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationOptions
+      n_starts: 3
+      vary:
+        kl: true
+        ks: true
+        k3: true
+        g: false

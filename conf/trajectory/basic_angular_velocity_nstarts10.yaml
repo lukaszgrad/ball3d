@@ -1,0 +1,7 @@
+defaults:
+  - basic_angular_velocity_wider_spin
+
+estimator_params:
+  arc_optimizer_config:
+    optimization_options:
+      n_starts: 10

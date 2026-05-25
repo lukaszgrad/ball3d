@@ -1,0 +1,15 @@
+defaults:
+  - mujoco_kinetic_estimator
+
+estimator_params:
+  arc_optimizer_config:
+    loss_function:
+      model:
+          use_ellipsoid_fluid: true
+    optimization_options:
+      vary:
+        blunt_drag: true
+        slender_drag: false
+        angular_drag: true
+        kutta_lift: false
+        magnus_lift: true

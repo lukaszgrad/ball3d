@@ -1,0 +1,21 @@
+show_pivot_points: true
+show_ball_detection: true
+show_ball_uncertainty: true
+highlight_repaired_segments: true
+trajectory_trace_seconds: 8
+arc_pivot_annotated_color: (255, 0, 255)
+arc_pivot_color: (0, 255, 255)
+arc_repaired_color: (0, 90, 40)
+arc_regular_color: (0, 0, 255)
+arc_gt_color: (0, 255, 0)
+ground_pivot_annotated_color: (255, 0, 255)
+ground_pivot_color: (255, 255, 0)
+ground_repaired_color: (90, 40, 40)
+ground_regular_color: (255, 0, 0)
+ground_gt_color: (0, 50, 0)
+circle_thickness_regular: 1
+circle_thickness_repaired: -1
+circle_thickness_uncertainty: 2
+pivot_size_multiplier: 1
+fading_speed: 0
+show_ground_truth: false

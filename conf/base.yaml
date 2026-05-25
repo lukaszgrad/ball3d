@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - trajectory: base_trajectory
+  - visualisation: base
+  - preprocessing: base
+  - _self_
+
+start_sec: 0
+end_sec: -1 # -1 means last sec
+step_frame: 1
+n_jobs: 8
+
+root: ??? # Path to root data folder
+version:
+output_version:
+
+use_gt_pivots: true

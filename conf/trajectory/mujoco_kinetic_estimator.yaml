@@ -1,0 +1,31 @@
+defaults:
+  - base_trajectory
+
+estimator_params:
+  arc_optimizer_config:
+    loss_function:
+      model:
+        _target_: ball_estimation.trajectory.model.mujoco_model.MujocoTrajectoryModel
+        use_ellipsoid_fluid: false
+        air_viscosity: 0.00002
+        air_density: 1.2
+        use_virtual_mass: true
+    optimization_bounds:
+      _target_: ball_estimation.trajectory.model.mujoco_model.MujocoArcOptimizationBounds
+      angular_velocity_factor: 0
+      k3: 0.0
+    optimization_options:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationOptions
+      vary:
+        kl: false
+        ks: false
+        k3: false
+        g: false
+        wx0: false
+        wy0: false
+        wz0: false
+        blunt_drag: false
+        slender_drag: false
+        angular_drag: false
+        kutta_lift: false
+        magnus_lift: false

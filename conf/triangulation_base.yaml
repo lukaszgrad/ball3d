@@ -1,0 +1,10 @@
+# @package _global_
+
+defaults:
+  - triangulation: base
+  - _self_
+
+match_root: ???
+half: ???
+output_version:
+eval_loco: false

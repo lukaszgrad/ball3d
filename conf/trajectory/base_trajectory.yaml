@@ -1,0 +1,95 @@
+use_ball_detection_inplay: false
+use_ball_tracking_inplay: false
+estimator_name: "KineticTrajectoryEstimator"
+estimator_params:
+  debug: 0
+  verbose: false
+  use_multiple_balls: false
+  use_high_pivots_correction: true
+  use_shots_fit: true
+  good_fit_threshold: 0.035                          # 1 (pixels)
+  use_relative_error: false
+  use_dynamic_pivots: false
+  top_K: 5                                           # 1
+  max_depth: 1                                       # 1
+  dynamic_improvement_factor: 0.35                   # 1
+  correct_wrong_pivots: false
+  too_short_track: 5                                 # 1 (frames)
+  too_long_track: 150                                # 1 (frames)
+  allowed_detection_error: 3.2                       # 1 (pixels)
+  nans_allowed: 0.8                                  # 1   
+
+  arc_optimizer_config:
+    _target_: ball_estimation.trajectory.optimization.ArcOptimizer
+    optimization_bounds:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationBounds
+      allowed_startpoint_shift_arc: 1                    # dm
+      max_ball_speed: 600                                # dm / s
+      gravitation_g: 9.806                               # m / s^2
+      g_variation: 3.5                                   # m / s^2
+      k3: 0.05
+      k3_variation: 0.95
+      kl: 0.0
+      ks: 0.0
+      kl_ks_variation: 0.004                             # m^(-1)
+    optimization_options:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationOptions
+      n_starts: 1
+      minimize_kws: {}
+      vary:
+        kl: false
+        ks: false
+        k3: true
+        g: false
+    loss_function:
+      _target_: ball_estimation.trajectory.loss_function.ArcLossFunction
+      camera: None # OBSOLETE
+      camera_smooth_df: None # OBSOLETE
+      video_metadata: None # OBSOLETE
+      ballsize_relative_loss: true
+      weight_end_arc: 0.35                               # 1
+      weight_zpenalty_arc: 0.3                           # 1
+      ball_median_size: 0 # OBSOLETE
+      nans_allowed: 0.8                                  # 1
+      model:
+        _target_: ball_estimation.trajectory.model.ArcTrajectoryModel
+
+  straight_optimizer_config:
+    _target_: ball_estimation.trajectory.optimization.StraightOptimizer
+    optimization_bounds:
+      _target_: ball_estimation.trajectory.optimization.StraightOptimizationBounds
+      allowed_endpoints_shift_straight: 0.1              # dm
+    loss_function:
+      _target_: ball_estimation.trajectory.loss_function.StraightLossFunction
+      camera: None  # OBSOLETE
+      camera_smooth_df: None # OBSOLETE
+      video_metadata: None # OBSOLETE
+      ballsize_relative_loss: true
+      weight_start_straight: 0.15                        # 1
+      weight_end_straight: 0.15                          # 1
+      nans_allowed: 0.8                                  # 1
+      model:
+        _target_: ball_estimation.trajectory.model.StraightTrajectoryModel
+
+  estimator_interface_config:
+    verbose: false
+    use_relative_error: false
+    out_margin: 5                                      # dm
+
+  data_processor_config:
+    ball_radius_correction: 0.8                        # 1
+    epsilon_frac: 0.66                                 # 1 (multiplier)
+    max_distance_for_contact_approval: 0.55            # 1
+    min_ball_height_to_detect_high_pivot: 0.17         # 1
+    v_frac_threshold: 2                                # 1
+    cos_threshold: 0.3                                 # 1
+    out_margin: 5                                      # dm
+    z_correction_coefficient: 1.0                      # 1 (obsolete)
+
+  probability_threshold_to_detect_pivot_point: 0.11  # 1
+  pivot_points_window: 11                            # 1 (frames number)
+  postproc_threshold_multiplier: 1.25                # 1
+  med_dist_threshold: 4.0                            # dm
+  high_dist_threshold: 7.5                           # dm
+  dist_frac_threshold: 1.5                           # 1
+  angle_threshold: 0.75                              # 1

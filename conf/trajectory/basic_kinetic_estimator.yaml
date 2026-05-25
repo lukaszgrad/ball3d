@@ -1,0 +1,12 @@
+defaults:
+  - base_trajectory
+
+estimator_params:
+  arc_optimizer_config:
+    optimization_options:
+      _target_: ball_estimation.trajectory.optimization.ArcOptimizationOptions
+      vary:
+        kl: false
+        ks: false
+        k3: true
+        g: false
