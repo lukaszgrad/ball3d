@@ -1,7 +1,0 @@
-# @package _global_
-
-defaults:
-  - override /trajectory: kinetic_estimator_gt_pivots
-
-version: gt_pivots
-use_gt_pivots: true

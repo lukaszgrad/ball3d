@@ -3,7 +3,6 @@
 defaults:
   - trajectory: base_trajectory
   - visualisation: base
-  - preprocessing: base
   - _self_
 
 start_sec: 0

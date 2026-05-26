@@ -1,4 +1,0 @@
-defaults:
-  - base
-
-method: pairwise_dbscan

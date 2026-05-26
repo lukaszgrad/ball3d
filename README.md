@@ -60,9 +60,21 @@ uv run python estimate_trajectory.py \
 
 ### Visualization
 
+Render a model's 3D trajectory overlaid on the source video. Requires `input.mkv` in the clip directory.
+
 ```bash
 uv run python visualize_trajectory.py \
-    root=data/1080-txm/clip version=base
+    root=data/<clip>/clip \
+    version=basic_angular
+```
+
+Add `visualisation.show_ground_truth=true` to also overlay the ground-truth trajectory:
+
+```bash
+uv run python visualize_trajectory.py \
+    root=data/<clip>/clip \
+    version=basic_angular \
+    visualisation.show_ground_truth=true
 ```
 
 ### Evaluation
