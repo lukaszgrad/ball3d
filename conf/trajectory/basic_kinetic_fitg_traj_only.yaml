@@ -1,0 +1,8 @@
+defaults:
+  - basic_kinetic_fitg
+
+estimator_params:
+  arc_optimizer_config:
+    loss_function:
+      weight_end_arc: 0.0
+      weight_zpenalty_arc: 0.0

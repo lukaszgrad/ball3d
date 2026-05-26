@@ -256,7 +256,7 @@ def evaluate_ball_trajectory(
         + f"Detection:       xy_err={det_xy_error:.3f}\n"
     )
 
-    # --- New metrics: acc@Xm, AP@Xm, mAP ---
+    # --- mAP and accuracy at distance thresholds ---
     has_gt = df["x"].notna()
     # is_str / is_arc_mask already derived from split_df / GT z above
 
@@ -311,7 +311,7 @@ def evaluate_ball_trajectory(
             has_3way = True
 
     log_msg = (
-        "\n\nNew metrics:\n"
+        "\n\nmAP and accuracy metrics:\n"
         f"  mAP_balanced={new_metrics['mAP_balanced']:.4f}; "
         f"mAP_overall={new_overall['mAP']:.4f}; "
         f"mAP_str={new_str['mAP']:.4f}; mAP_arc={new_arc['mAP']:.4f}\n"
@@ -461,11 +461,7 @@ def _get_coverage_mean_err_plot(df_ball_3d):
     )
     ax.grid()
     fig.canvas.draw()
-    image = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
-    try:
-        image = image.reshape(fig.canvas.get_width_height()[::-1] + (3,))
-    except Exception:
-        image = image.reshape((1600,2400,3))
+    image = np.asarray(fig.canvas.buffer_rgba())[:, :, :3].copy()
     plt.close()
 
     return image
@@ -488,11 +484,7 @@ def _get_coverage_max_err_plot(df_ball_3d):
     plt.minorticks_on()
     ax.grid(which="minor", linewidth=0.5)
     fig.canvas.draw()
-    image = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
-    try:
-        image = image.reshape(fig.canvas.get_width_height()[::-1] + (3,))
-    except Exception:
-        image = image.reshape((1600,2400,3))
+    image = np.asarray(fig.canvas.buffer_rgba())[:, :, :3].copy()
     plt.close()
 
     return image

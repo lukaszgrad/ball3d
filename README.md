@@ -45,22 +45,6 @@ All scripts use [Hydra](https://hydra.cc/) for configuration. **Always run via `
 
 See `conf/base.yaml` for global parameters and `conf/trajectory/` for estimator-specific configs.
 
-### Preprocessing
-
-Preprocess raw ball detections into smoothed trajectories and pivot points. This replaces the external respo Docker pipeline.
-
-```bash
-# Basic usage (reads unversioned files, writes unversioned output)
-uv run python preprocess_trajectory.py \
-    root=data/<clip>/clip
-
-# Separate input/output versions (read "dl", write "dl_test")
-uv run python preprocess_trajectory.py \
-    root=data/<clip>/clip version=dl output_version=dl_test
-```
-
-The pipeline runs 5 steps: ball tracking, track merging, Kalman smoothing, ball-player contact detection, and pivot point prediction. Config: `conf/preprocessing/base.yaml`.
-
 ### Trajectory Estimation
 
 ```bash
@@ -83,22 +67,15 @@ uv run python visualize_trajectory.py \
 
 ### Evaluation
 
+Compute per-clip metrics (mAP at multiple distance thresholds, 3D errors broken down by full / arc / straight, coverage, etc.) for a model's predictions:
+
 ```bash
 uv run python evaluate_trajectory.py \
-    root=data/1080-txm/clip version=base
+    root=data/<clip>/clip \
+    trajectory=basic_angular_velocity version=basic_angular
 ```
 
-### Statistics
-
-```bash
-# Estimated trajectory statistics
-uv run python statistics_trajectory.py \
-    root=data/1080-txm/clip version=base
-
-# Ground truth statistics
-uv run python statistics_gt_trajectory.py \
-    root=data/1080-txm/clip
-```
+Writes `<root>/eval/gt_metrics-<version>.json`, `<root>/eval/errors-<version>.csv`, and diagnostic plots. The JSON contains every metric reported in paper Tables 3 and 5.
 
 ### Available Trajectory Estimators
 
@@ -113,6 +90,11 @@ The seven physics models from the paper (Table 1):
 | `mujoco_kinetic_estimator` | MuJoCo kinetic | MuJoCo simulation with fixed inertia-based fluid drag (no fitted aero params) |
 | `mujoco_angular_velocity` | MuJoCo angular | MuJoCo with fitted initial angular velocity `ω₀` |
 | `mujoco_ellipsoid_angular_velocity` | MuJoCo ellipsoid | MuJoCo ellipsoid fluid model: blunt drag, angular drag, Magnus, with fitted `ω₀` |
+
+For the arc-loss ablation (paper Table 6, supplement §8.1), six additional configs match `basic_parabola` and `basic_fitg` but zero out individual loss-objective terms (`L_end`, `L_z`, or both):
+
+- `basic_kinetic_estimator_parabola_{no_end,no_z,traj_only}.yaml`
+- `basic_kinetic_fitg_{no_end,no_z,traj_only}.yaml`
 
 ### Common Overrides
 
@@ -130,19 +112,27 @@ start_sec=0 end_sec=-1
 use_gt_pivots=true
 ```
 
-### Batch Evaluation
+## Reproducing paper tables
 
-See [EVALUATE.md](EVALUATE.md) for per-dataset evaluation commands, HTML report generation, and `run_all.sh` / `generate_eval_report.py` option reference.
+Three shell scripts run evaluation across a dataset and macro-average the per-view results into a CSV matching the paper layout. Each assumes `ball_3d.<version>.csv` predictions already exist under each ROOT.
 
-## Testing
+| Script | Reproduces | Default ROOTS |
+|---|---|---|
+| `./eval_table3.sh` | Table 3 (mAPbal, mAParc per model) | LP-broadcast (camera00 × 2 halves) |
+| `./eval_table5.sh` | Table 5 (Full / Str / Arc mean 3D error, m, for the two best models) | LP-broadcast |
+| `./eval_table6.sh` | Table 6 (arc-loss ablation, mAParc and vertical error, 8 model × objective variants) | LP-static (camera01–05 × 2 halves) |
+
+What each script does:
+
+1. Calls `evaluate_trajectory.py` for every (root, model) pair to produce per-half `eval/gt_metrics-<version>.json`.
+2. Macro-averages the relevant fields across roots.
+3. Writes `logs/table<N>.csv`.
+
+Edit the `ROOTS=(...)` array at the top of a script to switch dataset columns (e.g. LP-static vs LP-broadcast — both blocks are present in each script, one commented out).
+
+Env vars:
 
 ```bash
-# Run all tests
-uv run pytest tests/
-
-# Estimator tests
-uv run pytest tests/estimators/test_estimator.py -v
-
-# Physics simulation tests
-uv run pytest tests/physics/test_mujoco.py -v
+OUTPUT_CSV=logs/table3-lp-static.csv  # override output path
+SKIP_EXISTING=1                       # reuse existing eval/gt_metrics-<ver>.json
 ```
