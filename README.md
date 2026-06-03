@@ -61,6 +61,8 @@ Concrete `<root>` examples for each dataset:
 
 Per-profile predictions (`ball_3d.<version>.csv`) are shipped for the seven paper models: `basic_parabola`, `basic_kinetic`, `basic_fitg`, `basic_angular`, `mujoco_kinetic`, `mujoco_angular`, `mujoco_ellipsoid`.
 
+For column-level schemas, units, and coordinate conventions, see [DATA.md](DATA.md).
+
 ## Running Experiments
 
 All scripts use [Hydra](https://hydra.cc/) for configuration. **Always run via `uv run`.**
