@@ -10,12 +10,12 @@ Download the contents into a `data/` directory at the repo root.
 
 The release groups the data into four datasets corresponding to the evaluations reported in the paper. The two primary datasets with full video are **LP** and **SW**.
 
-| Dataset | Folder(s) | View-sequences | Source video | Has player detections |
-|---|---|---|---|---|
-| **LP** — Legia × Piast (94-min match) | `legia_warszawa-piast_gliwice-20251214/` | 1 broadcast + 6 static, × 2 halves = 14 | yes (LP broadcast + LP static) | yes |
-| **SW** — Stalowa Wola drills | `stalowa_wola_{5,6,39,42}/` | 1 panoramic per sequence = 4 | yes (pano only) | no |
-| **EB** — Ekstraklasa broadcast | 5 game folders | 1 broadcast each = 5 | no (licensing) | no |
-| **ISSIA-3D** | `ISSIA/` | 6 cameras × `half_1` = 6 | no | yes |
+| Dataset | Folder(s) | View-sequences | Source video |
+|---|---|---|---|
+| **LP** — Legia × Piast (94-min match) | `legia_warszawa-piast_gliwice-20251214/` | 1 broadcast + 6 static, × 2 halves = 14 | yes (LP broadcast + LP static) |
+| **SW** — Stalowa Wola drills | `stalowa_wola_{5,6,39,42}/` | 1 panoramic per sequence = 4 | yes (pano only) |
+| **EB** — Ekstraklasa broadcast | 5 game folders | 1 broadcast each = 5 | no (licensing) |
+| **ISSIA-3D** | `ISSIA/` | 6 cameras × `half_1` = 6 | no |
 
 EB folders: `piast_gliwice-rakow_czestochowa-20230811`, `radomiak_radom-piast_gliwice-20230902`, `slask_wroclaw-zaglebie_lubin-20230729`, `zaglebie_lubin-lech_poznan-20230806`, `legia_warszawa-widzew_lodz-20230903`.
 
@@ -107,7 +107,7 @@ Same column conventions as `ball_detection.csv` but covering all player and goal
 
 ### `dev/df_merged_ball_player.csv` — preprocessing output
 
-Output of the preprocessing pipeline (ball tracking → smoothing → contact detection). Combines smoothed ball trajectory, the per-frame homography, and ball–player contact flags. Shipped with the dataset; regenerable via `preprocess_trajectory.py` (LP and ISSIA only — `SW` and `EB` lack player detections).
+Output of the preprocessing pipeline (ball tracking → smoothing → contact detection). Combines smoothed ball trajectory, the per-frame homography, and ball–player contact flags. Shipped with the dataset; regenerable via `preprocess_trajectory.py` where `detection/detection.feather` is available.
 
 | Group | Columns |
 |---|---|

@@ -30,7 +30,7 @@ uv run python preprocess_trajectory.py \
     version=test
 ```
 
-Requires player detections (`detection/detection.feather`), which are shipped only for **LP** and **ISSIA** — `SW` and `EB` do not include them, so preprocessing is not runnable for those datasets.
+Requires player detections (`detection/detection.feather`) under `<root>/detection/`.
 
 ### Trajectory Estimation
 
