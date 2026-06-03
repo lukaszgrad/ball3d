@@ -107,13 +107,13 @@ Same column conventions as `ball_detection.csv` but covering all player and goal
 
 ### `dev/df_merged_ball_player.csv` — preprocessing output
 
-Output of the preprocessing pipeline (ball tracking → smoothing → contact detection). Combines smoothed ball trajectory, the per-frame homography, and ball–player contact flags.
+Output of the preprocessing pipeline (ball tracking → smoothing → contact detection). Combines smoothed ball trajectory, the per-frame homography, and ball–player contact flags. Shipped with the dataset; regenerable via `preprocess_trajectory.py` (LP and ISSIA only — `SW` and `EB` lack player detections).
 
 | Group | Columns |
 |---|---|
 | Identity / smoothing | `file_name`, `track_id`, `xk`, `yk`, `xvar`, `yvar`, `score`, `x0`, `y0`, `x1`, `y1`, `a`, `b` |
 | Homography | `h0`..`h8` |
-| Pitch projection | `x_pitch2D`, `y_pitch2D`, `x_pano_real`, `y_pano_real` |
+| Pitch projection | `x_pitch2D`, `y_pitch2D` |
 | Contact flags | `p_detection_id`, `common_points`, `distance`, `ball_height_rel`, `out`, `far_contact`, `close_contact`, `high_contact` |
 | Height correction | `yk_corr`, `yk_original` |
 

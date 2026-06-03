@@ -175,7 +175,6 @@ def detect_ball_player_contacts(
     df_main: pd.DataFrame,
     df_ball: pd.DataFrame,
     video_metadata: dict[str, Any],
-    image_stitcher,
     epsilon_frac: float = 0.66,
     out_margin: float = 5.0,
     max_distance_for_contact_approval: float = 0.55,
@@ -188,11 +187,9 @@ def detect_ball_player_contacts(
     df_main : pd.DataFrame
         Player/goalkeeper detections with category, bbox, segmentation columns.
     df_ball : pd.DataFrame
-        Smoothed ball DataFrame with xk, yk, track_id, bbox columns.
+        Smoothed ball DataFrame with xk, yk, track_id, bbox, and h0..h8 columns.
     video_metadata : dict
         Must contain ``width``, ``height``.
-    image_stitcher
-        Image stitcher for panorama coordinate transforms.
     epsilon_frac : float
         Fraction of player height used as spatial tolerance.
     out_margin : float
@@ -267,7 +264,7 @@ def detect_ball_player_contacts(
     df_ball["yk_original"] = df_ball["yk"]
     df_ball["yk"] = df_ball["yk"] + df_ball["b"]
 
-    add_pitch_pano_coords(df_ball, video_metadata, image_stitcher)
+    add_pitch_pano_coords(df_ball, video_metadata)
     _add_contact_columns(
         df_ball, out_margin, max_distance_for_contact_approval,
         min_ball_height_to_detect_high_pivot,

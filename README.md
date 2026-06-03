@@ -18,6 +18,20 @@ All scripts use [Hydra](https://hydra.cc/) for configuration. **Always run via `
 
 See `conf/base.yaml` for global parameters and `conf/trajectory/` for estimator-specific configs.
 
+Pipeline order: raw detections → `preprocess_trajectory` → `estimate_trajectory` → `evaluate_trajectory` / `visualize_trajectory`. The GDrive dataset ships preprocessing output and per-model predictions, so the typical starting point is `evaluate_trajectory` or `visualize_trajectory`.
+
+### Preprocessing (optional)
+
+The GDrive dataset already ships the preprocessing output `dev/df_merged_ball_player.csv` for every view-sequence, so most users can skip this step. Run it only if you want to regenerate from raw detections.
+
+```bash
+uv run python preprocess_trajectory.py \
+    root=data/ISSIA/camera01/half_1 \
+    version=test
+```
+
+Requires player detections (`detection/detection.feather`), which are shipped only for **LP** and **ISSIA** — `SW` and `EB` do not include them, so preprocessing is not runnable for those datasets.
+
 ### Trajectory Estimation
 
 ```bash

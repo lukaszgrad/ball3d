@@ -20,10 +20,11 @@ _logger = logging.getLogger(__name__)
 def preprocess_ball(
     ball_detection_df: pd.DataFrame,
     player_detection_df: pd.DataFrame,
+    hom_smooth_df: pd.DataFrame,
     video_metadata: dict[str, Any],
     preprocessing_cfg: DictConfig,
     step_frame: int = 1,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+) -> pd.DataFrame:
     """Run the full ball preprocessing pipeline.
 
     Parameters
@@ -32,10 +33,10 @@ def preprocess_ball(
         Raw ball detections (x0, y0, x1, y1, score, file_name, ...).
     player_detection_df : pd.DataFrame
         Player/goalkeeper detections with category, bbox, segmentation.
+    hom_smooth_df : pd.DataFrame
+        Per-frame inverse homography (columns ``frame_index``, ``h0``..``h8``).
     video_metadata : dict
         Must contain fps, width, height.
-    image_stitcher
-        Panorama stitcher for coordinate transforms.
     preprocessing_cfg : DictConfig
         Hydra preprocessing config group.
     step_frame : int
@@ -43,13 +44,14 @@ def preprocess_ball(
 
     Returns
     -------
-    tuple[pd.DataFrame, pd.DataFrame]
-        (df_merged_ball_player, ball_pivot_point)
+    pd.DataFrame
+        ``df_merged_ball_player`` — smoothed ball positions joined with
+        per-frame homography and ball-player contact flags.
     """
     cfg = preprocessing_cfg
 
     # Step 1: Ball tracking
-    _logger.info("Step 1/5: Ball tracking ...")
+    _logger.info("Step 1/4: Ball tracking ...")
     if "score" in ball_detection_df.columns:
         df_tracked = track_ball_inplay(ball_detection_df)
     else:
@@ -57,7 +59,7 @@ def preprocess_ball(
         df_tracked = ball_detection_df.copy()
 
     # Step 2: Track merging
-    _logger.info("Step 2/5: Track merging ...")
+    _logger.info("Step 2/4: Track merging ...")
     df_merged = merge_ball_tracks(
         df_tracked,
         gap_allowed=cfg.merge.gap_allowed,
@@ -65,7 +67,7 @@ def preprocess_ball(
     )
 
     # Step 3: 2D Kalman smoothing
-    _logger.info("Step 3/5: 2D Kalman smoothing ...")
+    _logger.info("Step 3/4: 2D Kalman smoothing ...")
     df_ball = kf_smoothing(
         df_merged,
         video_metadata=video_metadata,
@@ -78,18 +80,23 @@ def preprocess_ball(
     )
     if len(df_ball) == 0:
         _logger.warning("Filtering produced empty DataFrame — no valid intervals found")
-        empty_merged = pd.DataFrame()
-        empty_pivot = pd.DataFrame(
-            columns=["file_name", "track_id", "pivot_probability", "pivot_point"]
-        )
-        return empty_merged, empty_pivot
+        return pd.DataFrame()
 
     # restore track id
     if "track_id" not in df_ball.columns:
         df_ball["track_id"] = 0
 
+    # Merge per-frame homography (needed by contact detection below and downstream
+    # estimate; df_merged_ball_player must carry h0..h8).
+    hom_cols = [f"h{i}" for i in range(9)] + ["frame_index"]
+    df_ball = df_ball.merge(
+        hom_smooth_df[hom_cols].rename(columns={"frame_index": "file_name"}),
+        on="file_name",
+        how="left",
+    )
+
     # Step 4: Ball-player contact detection
-    _logger.info("Step 4/5: Ball-player contact detection ...")
+    _logger.info("Step 4/4: Ball-player contact detection ...")
     df_merged_ball_player = detect_ball_player_contacts(
         df_main=player_detection_df,
         df_ball=df_ball,
