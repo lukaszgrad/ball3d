@@ -70,23 +70,21 @@ See `conf/base.yaml` for global parameters and `conf/trajectory/` for estimator-
 ### Trajectory Estimation
 
 ```bash
-# Default estimator
-uv run python estimate_trajectory.py \
-    root=data/1080-txm/clip version=base
-
-# Custom estimator
 uv run python estimate_trajectory.py \
     trajectory=basic_angular_velocity \
-    root=data/1080-txm/clip version=base
+    root=data/stalowa_wola_5/pano/clip \
+    version=basic_angular
 ```
+
+Writes `<root>/track/ball_3d.<version>.csv`. The `<root>` path depends on the dataset (see the [Data structure](#data-structure) examples).
 
 ### Visualization
 
-Render a model's 3D trajectory overlaid on the source video. Requires `input.mkv` in the clip directory.
+Render a model's 3D trajectory overlaid on the source video. Requires `input.mkv` in `<root>` (LP and SW pano only).
 
 ```bash
 uv run python visualize_trajectory.py \
-    root=data/<clip>/clip \
+    root=data/stalowa_wola_5/pano/clip \
     version=basic_angular
 ```
 
@@ -94,7 +92,7 @@ Add `visualisation.show_ground_truth=true` to also overlay the ground-truth traj
 
 ```bash
 uv run python visualize_trajectory.py \
-    root=data/<clip>/clip \
+    root=data/stalowa_wola_5/pano/clip \
     version=basic_angular \
     visualisation.show_ground_truth=true
 ```
@@ -105,7 +103,7 @@ Compute per-clip metrics (mAP at multiple distance thresholds, 3D errors broken 
 
 ```bash
 uv run python evaluate_trajectory.py \
-    root=data/<clip>/clip \
+    root=data/stalowa_wola_5/pano/clip \
     trajectory=basic_angular_velocity version=basic_angular
 ```
 
@@ -152,9 +150,9 @@ Three shell scripts run evaluation across a dataset and macro-average the per-vi
 
 | Script | Reproduces | Default ROOTS |
 |---|---|---|
-| `./eval_table3.sh` | Table 3 (mAPbal, mAParc per model) | LP-broadcast (camera00 × 2 halves) |
-| `./eval_table5.sh` | Table 5 (Full / Str / Arc mean 3D error, m, for the two best models) | LP-broadcast |
-| `./eval_table6.sh` | Table 6 (arc-loss ablation, mAParc and vertical error, 8 model × objective variants) | LP-static (camera01–05 × 2 halves) |
+| `./eval_table3.sh` | Table 3 (mAPbal, mAParc per model) | LP-static (cameras 01–05 × 2 halves) |
+| `./eval_table5.sh` | Table 5 (Full / Str / Arc mean 3D error, m, for the two best models) | LP-static (cameras 01–05 × 2 halves) |
+| `./eval_table6.sh` | Table 6 (arc-loss ablation, mAParc and vertical error, 8 model × objective variants) | LP-static (cameras 01–05 × 2 halves) |
 
 What each script does:
 
@@ -162,7 +160,7 @@ What each script does:
 2. Macro-averages the relevant fields across roots.
 3. Writes `logs/table<N>.csv`.
 
-Edit the `ROOTS=(...)` array at the top of a script to switch dataset columns (e.g. LP-static vs LP-broadcast — both blocks are present in each script, one commented out).
+Edit the `ROOTS=(...)` array at the top of a script to switch dataset columns. `eval_table3.sh` and `eval_table5.sh` ship with a commented-out LP-broadcast block alongside the active LP-static one; `eval_table6.sh` is LP-static only (per paper §8.1).
 
 Env vars:
 

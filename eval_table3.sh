@@ -25,12 +25,12 @@ MODELS=(
 )
 
 # One ROOT per camera-half. The final macro-average is taken across these.
-# LP-broadcast (default): 1 camera × 2 halves.
+# LP-broadcast: 1 camera × 2 halves — uncomment to use:
 # ROOTS=(
-#     "data/legia_warszawa-piast_gliwice-20251214/camera00/half_1"
-#     "data/legia_warszawa-piast_gliwice-20251214/camera00/half_2"
+#     "data/legia_warszawa-piast_gliwice-20251214/broadcast/half_1"
+#     "data/legia_warszawa-piast_gliwice-20251214/broadcast/half_2"
 # )
-# LP-static: 5 cameras × 2 halves — uncomment to use:
+# LP-static (default): 5 cameras × 2 halves.
 ROOTS=(
     "data/legia_warszawa-piast_gliwice-20251214/camera01/half_1"
     "data/legia_warszawa-piast_gliwice-20251214/camera01/half_2"
