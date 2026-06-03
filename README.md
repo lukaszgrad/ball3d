@@ -1,6 +1,25 @@
-# ball3d
+<div align="center">
 
-3D ball trajectory estimation and analysis for football/soccer video footage.
+# _Physics-Based 3D Ball Trajectory Reconstruction from Monocular Soccer Video: A Multi-Model Benchmark_
+
+**Łukasz Grad**<sup>1,2,\*</sup> &nbsp;&nbsp; **Krzysztof M. Czajkowski**<sup>2,\*</sup> &nbsp;&nbsp; **Aliaksandr Varashylau**<sup>2,\*</sup>
+
+<sup>1</sup>University of Warsaw, Poland &nbsp;&nbsp; <sup>2</sup>ReSpo.Vision, Poland
+<sup>\*</sup>Equal contribution · 📧 [l.grad@mimuw.edu.pl](mailto:l.grad@mimuw.edu.pl)
+
+[![Paper](https://img.shields.io/badge/Paper-CVPRW%202026-blue)](https://openaccess.thecvf.com/content/CVPR2026W/CVsports/papers/Grad_Physics-Based_3D_Ball_Trajectory_Reconstruction_from_Monocular_Soccer_Video_A_CVPRW_2026_paper.pdf)
+[![Supplement](https://img.shields.io/badge/Supplement-PDF-red)](https://openaccess.thecvf.com/content/CVPR2026W/CVsports/supplemental/Grad_Physics-Based_3D_Ball_CVPRW_2026_supplemental.pdf)
+[![Project Page](https://img.shields.io/badge/Project-Page-brightgreen)](https://lukaszgrad.github.io/soccer-ball3d/)
+[![Dataset](https://img.shields.io/badge/Dataset-DATA.md-orange)](DATA.md)
+[![License](https://img.shields.io/badge/License-CC--BY--NC--SA--4.0-lightgrey)](LICENSE)
+
+</div>
+
+## 🔍 Overview
+
+**TL;DR.** We benchmark seven physics-based arc models — from gravity-only parabolas to MuJoCo simulations with drag, spin, and fluid forces — for reconstructing 3D soccer-ball trajectories from monocular video. The pipeline segments each trajectory at contact events and fits every segment by optimizing a forward-simulated flight model against a reprojection-based objective. Across five datasets (~6,000 trajectory segments), the monocular and oracle-3D protocols yield **reversed model rankings**: a fitted-gravity model wins under monocular reconstruction while a spin-decomposition model leads when fitted to 3D ground truth — suggesting that observation noise and single-view geometric ambiguity, not model expressiveness, are the primary limiting factors. We publicly release two new soccer datasets with triangulated 3D ground truth, plus segment-level annotations for APIDIS and ISSIA-3D.
+
+![Datasets](https://lukaszgrad.github.io/soccer-ball3d/static/images/fig1_datasets.png)
 
 ## Installation
 
@@ -133,3 +152,22 @@ Env vars:
 OUTPUT_CSV=logs/table3-lp-static.csv  # override output path
 SKIP_EXISTING=1                       # reuse existing eval/gt_metrics-<ver>.json
 ```
+
+## ✏️ Citation
+
+If you find this work useful, please cite our paper:
+
+```bibtex
+@InProceedings{Grad_2026_CVPR,
+    author    = {Grad, {\L}ukasz and Czajkowski, Krzysztof M. and Varashylau, Aliaksandr},
+    title     = {Physics-Based 3D Ball Trajectory Reconstruction from Monocular Soccer Video: A Multi-Model Benchmark},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
+    month     = {June},
+    year      = {2026},
+    pages     = {9940-9948}
+}
+```
+
+## 📄 License
+
+This project is licensed under the [CC-BY-NC-SA-4.0](LICENSE) license.
