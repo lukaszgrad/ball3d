@@ -14,16 +14,13 @@ The annotations, preprocessing output, and triangulated 3D ground truth in this 
 
 ## Datasets
 
-The release groups the data into four datasets corresponding to the evaluations reported in the paper. The two primary datasets with full video are **LP** and **SW**.
+The release groups the data into three datasets corresponding to the evaluations reported in the paper. The two primary datasets with full video are **LP** and **SW**.
 
 | Dataset | Folder(s) | View-sequences | Source video |
 |---|---|---|---|
 | **LP** — Legia × Piast (94-min match) | `legia_warszawa-piast_gliwice-20251214/` | 1 broadcast + 6 static, × 2 halves = 14 | yes (LP broadcast + LP static) |
 | **SW** — Stalowa Wola drills | `stalowa_wola_{5,6,39,42}/` | 1 panoramic per sequence = 4 | yes (pano only) |
-| **EB** — Ekstraklasa broadcast | 5 game folders | 1 broadcast each = 5 | no (licensing) |
 | **ISSIA-3D** | `ISSIA/` | 6 cameras × `half_1` = 6 | no |
-
-EB folders: `piast_gliwice-rakow_czestochowa-20230811`, `radomiak_radom-piast_gliwice-20230902`, `slask_wroclaw-zaglebie_lubin-20230729`, `zaglebie_lubin-lech_poznan-20230806`, `legia_warszawa-widzew_lodz-20230903`.
 
 ## Per-clip layout
 
@@ -34,7 +31,6 @@ Each view-sequence is one monocular clip. It lives in a `<root>/` directory with
 | LP broadcast | `data/legia_warszawa-piast_gliwice-20251214/broadcast/half_1/` |
 | LP static | `data/legia_warszawa-piast_gliwice-20251214/camera03/half_1/` |
 | SW pano | `data/stalowa_wola_5/pano/clip/` |
-| EB game | `data/piast_gliwice-rakow_czestochowa-20230811/clip/` |
 | ISSIA-3D camera | `data/ISSIA/camera01/half_1/` |
 
 ```
