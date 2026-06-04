@@ -6,6 +6,12 @@ Companion reference for the datasets shipped with the ball3d release. The datase
 
 Download the contents into a `data/` directory at the repo root.
 
+## Access & License
+
+The dataset is released for **non-commercial academic research**. For access, questions, or to report issues, please email **[l.grad@mimuw.edu.pl](mailto:l.grad@mimuw.edu.pl)**.
+
+The annotations, preprocessing output, and triangulated 3D ground truth in this release are licensed under [**CC-BY-NC-SA-4.0**](LICENSE) — the same terms as the code. The raw broadcast video (`input.mkv`, LP and SW pano only) is provided **for non-commercial research use only**; copyright in the underlying footage remains with its original owners, and it may not be redistributed.
+
 ## Datasets
 
 The release groups the data into four datasets corresponding to the evaluations reported in the paper. The two primary datasets with full video are **LP** and **SW**.
